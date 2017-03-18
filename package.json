@@ -1,0 +1,21 @@
+{
+  "name": "aws-stepper",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "files": [],
+  "scripts": {
+    "deploy-dev": "npm run deploy-lambdas-dev && npm run deploy-server-dev",
+    "deploy-lambdas-dev": "rm -rf node_modules && npm install --production && sls deploy && npm install",
+    "deploy-prod": "npm run deploy-lambdas-prod && npm run deploy-server-prod",
+    "deploy-lambdas-prod": "rm -rf node_modules && npm install --production && sls deploy --stage production && npm install"
+  },
+  "author": "Nickolas Sharp - Thrivedev",
+  "license": "DBAD",
+  "dependencies": {
+    "aws-sdk": "^2.28.0"
+  },
+  "devDependencies": {
+    "ava": "^0.18.1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "aws": {
+    "region": "us-west-2"
+  },
+  "activitiesArns": [
+    "activity-one",
+    "activity-two",
+    "activity-three"
+  ]
+}
