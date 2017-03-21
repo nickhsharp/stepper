@@ -198,7 +198,7 @@ Having deployed the lamdbda handler in /handlers/StepChooser, you would then mod
 
   "LambdaChooser:Chooser": {
     "Type": "Task",
-    "Resource": "arn:aws:lambda:::function:StepChooser",
+    "Resource": "arn:aws:lambda:::function:LogicalRouter",
     "ResultPath": "$.meta",
     "Next": "LambdaChooser::Choice"
   },
