@@ -1,6 +1,6 @@
 "use strict";
 
-let {DOT} = require("../lib/utils");
+let utils = require("../../lib/utils");
 
 module.exports.handler = (event, context, callback) => {
   //take out the first branch to save the original input
@@ -10,7 +10,7 @@ module.exports.handler = (event, context, callback) => {
   // we need instructions on where to put... this is what the Parallel.ResultPath should do
   if(input.meta && input.meta.ParallelResultPath) {
     // limited JSON path set.  supports object and array notation
-    DOT.set(input, input.meta.ParallelResultPath, event)
+    utils.DOT.set(input, input.meta.ParallelResultPath, event)
     // at this point input has been injected with what should the output of parallel.ResultPath
   }
 

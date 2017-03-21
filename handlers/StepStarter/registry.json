@@ -1,0 +1,10 @@
+{
+  "::states::stateMachine:Example": {
+    "us-west-2": {
+      "dev": {
+        "LATEST": "arn:aws:states:us-west-2::stateMachine:Example-v1",
+        "v1": "arn:aws:states:us-west-2::stateMachine:Example-v1"
+      }
+    }
+  }
+}

@@ -1,15 +1,18 @@
 "use strict";
 
-const AWS = require('aws-sdk');
-const step = new AWS.StepFunctions({
-  region: 'us-west-2',
-});
+const configs = require("../../scripts/configs.json");
+const logger = require("../../lib/logger");
+
+const AWS = require("aws-sdk");
+const lambda = new AWS.Lambda(configs.aws);
 
 module.exports.handler = (event, context, callback) => {
   // if execution was not a Sub Step then no-op return;
   if(!event.meta || !event.meta.taskToken) {
     return callback(null);
   } 
+
+  logger("Closing SubStep", event.meta)
 
   // default success condition is true
   let method = "sendTaskSuccess";
@@ -20,13 +23,19 @@ module.exports.handler = (event, context, callback) => {
     event.meta.success = true;
   }
 
-  // invoke the Success or Failure of the Activity from the Parent Step Function
-  return step[method]({
-    taskToken: event.meta.taskToken,
-    output: JSON.stringify(event.report),
+  // invoke the Success or Failure to our internal taskToken lambdas
+  // so that we can abstract ParallelEach amongst others
+  return lambda.invoke({
+    InvocationType: "Event",
+    Payload: JSON.stringify({
+      taskToken: event.meta.tastToken,
+      output: event.report,
+    }),
+    FunctionName: method
   }).promise().then(() => {
-    callack(null, event);
+    callback(null, event);
   }).catch((err) => {
-    callback(err);
+    logger("Error calling closer.", err)
+    callback(err, null);
   });
 }
