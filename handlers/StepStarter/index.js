@@ -2,7 +2,7 @@
 
 const configs = require("../../scripts/configs.json");
 const utils = require("../../lib/utils");
-const logger = require("../../lib/logger");
+const logger = utils.LOG;
 
 const AWS = require("aws-sdk");
 const step = new AWS.StepFunctions(configs.aws);

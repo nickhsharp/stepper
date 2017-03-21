@@ -1,7 +1,7 @@
 "use strict";
 
 const configs = require("../../scripts/configs.json");
-const logger = require("../../lib/logger");
+const logger = utils.LOG;
 
 const AWS = require("aws-sdk");
 const lambda = new AWS.Lambda(configs.aws);

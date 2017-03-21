@@ -1,7 +1,7 @@
 "use strict";
 
 const utils = require("../../lib/utils");
-const logger = require("../../lib/logger");
+const logger = utils.LOG;
 
 const rules = require("./rules");
 const comparisons = require("./comparisons");
