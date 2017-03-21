@@ -21,7 +21,7 @@ When you desire to compare an execution state property to another:
   "Choices": [
     {
       "Variable": "$.foo",
-      "NumericGreaterThan": "$.bar"
+      "NumericGreaterThan": "$.bar",
       "Next": "NextState1"
     },
     {
