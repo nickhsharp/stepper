@@ -75,7 +75,7 @@ We would expect an output of:
 }
 ```
 
-## Shim
+## The Shim
 Having deployed the lamdbda handler in /handlers/StepParallelCleaner, you would then modify your Step Function to look more like the following:
 ```json
 {

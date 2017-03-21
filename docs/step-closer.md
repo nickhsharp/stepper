@@ -22,7 +22,6 @@ Closer is dependant on our standardized payload pattern.  The standardized paylo
 }
 ```
 
-
 ## Closer States
 Having deployed the lamdbda handler in /handlers/StepParallelCleaner, you would then modify your Step Function to look more like the following:
 ```json
@@ -76,6 +75,7 @@ Having deployed the lamdbda handler in /handlers/StepParallelCleaner, you would 
   }
 }
 ```
+
 ## Notes
 1. For Closer to work to allow Sub Step composition, you MUST ensure that you have "Caught" every possible failure point.  
 2. Essentially: if/when Step Functions allow you to designate a "Catch All" route, that route should lead into Closer.

@@ -1,0 +1,35 @@
+{
+  "Comment": "An example of the Amazon States Language using a choice state.",
+  "StartAt": "ChoiceState",
+  "States": {
+    "ChoiceState": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.foo.bar",
+          "NumericEquals": 1,
+          "Next": "NextState1"
+        },
+        {
+          "Variable": "$.foo.bar",
+          "NumericEquals": 2,
+          "Next": "NextState2"
+        }
+      ],
+      "Default": "NextState3"
+    },
+
+    "NextState1": {
+      "Type": "Pass",
+      "End": true
+    },
+    "NextState2": {
+      "Type": "Pass",
+      "End": true
+    },
+    "NextState3": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
