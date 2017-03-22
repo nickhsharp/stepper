@@ -38,3 +38,7 @@ jspm_packages
 
 # !@#$ off mac
 .DS_Store
+
+# Serverless
+.serverless
+serverless.yaml

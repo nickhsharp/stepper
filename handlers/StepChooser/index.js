@@ -17,7 +17,7 @@ function ruleCheck(event, ruleDef) {
   let options = ruleDef[ruleName].Choices;
 
   let successNext, failNext;
-  ruleDef[ruleName].Choices.forEach((option) => {
+  options.forEach((option) => {
     if(option.BooleanEquals) {
       successNext = option.Next;
     } else {
@@ -65,7 +65,6 @@ function ruleCheck(event, ruleDef) {
       reasons: [err]
     }
   }) 
-  
 };
 
 function evaluator(event, choice) {
