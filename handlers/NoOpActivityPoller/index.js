@@ -75,8 +75,9 @@ module.exports.handler = (event, context, callback) => {
         try {
           activity.input = JSON.parse(activity.input);
         } catch(e) {
+          let original = activity.input;
           activity.input = {
-            original: activity.input
+            original: original
           }
         }
 
@@ -91,6 +92,9 @@ module.exports.handler = (event, context, callback) => {
         process.nextTick(() => {
           doPoll(arn, proceedCheck);
         });
+      }).catch((err) => {
+        console.log("ERR", err);
+        callback(err, null);
       })
     } else {
       console.log("proceedCheck:false", arn)

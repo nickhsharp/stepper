@@ -8,7 +8,7 @@ const lambda = new AWS.Lambda(configs.aws);
 
 module.exports.handler = (event, context, callback) => {
   // if execution was not a Sub Step then no-op return;
-  if(!event.meta || !event.meta.taskToken) {
+  if(!event.meta || !event.meta.taskToken ) {
     return callback(null);
   } 
 
@@ -28,7 +28,7 @@ module.exports.handler = (event, context, callback) => {
   return lambda.invoke({
     InvocationType: "Event",
     Payload: JSON.stringify({
-      taskToken: event.meta.tastToken,
+      taskToken: event.meta.taskToken,
       output: event.report,
     }),
     FunctionName: method

@@ -14,6 +14,7 @@ Closer is dependant on our standardized payload pattern.  The standardized paylo
   "meta": {
     "name": "UUID of this execution",
     "arn": "arn of this execution"
+    "taskToken": "internal Task Token",
     "parent": {
       "name": "UUID of the parent execution - if exists",
       "arn": "arn of the parent execution - if exists"

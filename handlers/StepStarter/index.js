@@ -15,24 +15,57 @@ const step = new AWS.StepFunctions(configs.aws);
 */
 const registry = require("./registry.json");
 
+
+/*
+  {
+    initial: {},
+    meta: {
+      name: "name guid to start with",
+      arn: "arn to start",
+      
+      // optionals
+      stage: "step stage to start",
+      alias: "step alias to start",
+      version: "step version to start",
+      region: "step region to use",
+      // optionals
+      
+      taskToken: "internal task Token",
+      
+      parent: {
+        name: "name guid of the parent calling step functio",
+        arn: "arn of the parent calling step function",
+
+        // optionals
+        stage: "step stage to start",
+        alias: "step alias to start",
+        version: "step version to start",
+        region: "step region to use",
+        // optionals
+      }
+    }
+  }
+
+*/
 module.exports.handler = (event, context, callback) => {
   /*
     A helluva lot more schema validation forth coming
     @TODO: enforce entry and exit schema validation with JSON schema.
   */
-  event.stage = event.stage || process.env.STAGE || 'dev';
-  event.alias = event.alias || 'LATEST';
-  event.name = event.name || utils.UID.v1Sortable();
-  event.region = event.region || context.invokedFunctionArn.split(":")[3];
+  event.meta.stage = event.meta.stage || process.env.STAGE || 'dev';
+  event.meta.alias = event.meta.alias || 'LATEST';
+  event.meta.region = event.meta.region || context.invokedFunctionArn.split(":")[3];
 
+  event.meta.name = event.meta.name || utils.UID.v1Sortable();
+  
   /*
     Version is more specific than Alias and if set would be used
   */
-  let alias = event.alias;
-  if (event.version) {
-    alias = `v${event.version}`;
+  let alias = event.meta.alias;
+  if (event.meta.version) {
+    alias = `v${event.meta.version}`;
   }
-  let lookup = `${event.internalStateMachineArn}.${event.region}.${event.stage}.${alias}`;
+  let lookup = `${event.meta.arn}.${event.meta.region}.${event.meta.stage}.${alias}`;
 
   let arn = utils.DOT.get(registry, lookup);
   if(!arn) {
@@ -43,17 +76,17 @@ module.exports.handler = (event, context, callback) => {
   }
 
   /*
-    Preserve inputed meta in case there were parent name and parent arn.
+    Preserve the "slug" version of the arn,
+    but update the actual meta of the real arn
+    of the actual alias/version of the step
   */
-  event.input = event.input || {};
-  event.input.meta = event.input.meta || {};
-  event.input.meta.arn = arn;
-  event.input.meta.name = event.name;
+  event.meta.genericArn = event.meta.arn;
+  event.meta.arn = arn;
 
   return step.startExecution({
     stateMachineArn: arn,
-    input: JSON.stringify(event.input),
-    name: event.name,
+    input: JSON.stringify(input),
+    name: event.meta.name,
   }).promise().then((ret) => {
     callback(null, ret.data);
   })
