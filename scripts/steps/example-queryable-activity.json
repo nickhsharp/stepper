@@ -1,0 +1,22 @@
+{
+  "StartAt": "QueryableActivity:ShimPass",
+  "States": {
+    "QueryableActivity:ShimPass": {
+      "Type": "Pass",
+      "Result": {
+        "Resource": "arn:aws:states:us-west-2:379633348023:activity:test-queryable-activity",
+        "InputPath": "$.data",
+        "Queryable": "$.meta.queryable",
+        "Type": "QueryableActivity"
+      },
+      "ResultPath": "$.meta.instructions",
+      "Next": "QueryableActivity"
+    },
+
+    "QueryableActivity": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:us-west-2:379633348023:activity:test-queryable-activity",
+      "End": true
+    }
+  }
+}

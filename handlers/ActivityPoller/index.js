@@ -98,6 +98,10 @@ module.exports.handler = (event, context, callback) => {
         process.nextTick(() => {
           doPoll(arn, proceedCheck);
         });
+      }).catch((err) => {
+        console.log("ERR", err);
+        console.log(logs);
+        callback(err, null);
       })
     } else {
       console.log("proceedCheck:false", arn)

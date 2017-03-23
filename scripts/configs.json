@@ -3,6 +3,12 @@
     "region": "us-west-2"
   },
   "activitiesArns": [
+    "arn:aws:states:us-west-2:379633348023:activity:test-queryable-activity"
+  ],
+  "dynamo": {
+    "internalTasks": "internal-tasks"
+  },
+  "_activitiesArns": [
     "arn:aws:states:us-west-2:379633348023:activity:relay-text-container-leverage-tm",
     "arn:aws:states:us-west-2:379633348023:activity:relay-text-container-leverage-mt"
   ]
