@@ -65,7 +65,6 @@ module.exports.handler = (event, context, callback) => {
   Promise.all(configs.activitiesArns.map((activityArn) => {
     return poller.doPoll(activityArn, proceedCheck, handler)
   })).then((ret) => {
-    utils.LOG.log
     logger.log("RET", ret);
   }).catch((err) => {
     logger.log("LOGS", err.logs);
