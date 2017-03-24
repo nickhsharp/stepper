@@ -5,7 +5,7 @@
 */
 let handler = require("../index.js").handler;
 
-let fakeSecondsLeft = 80
+let fakeSecondsLeft = 71
 handler({}, {
   getRemainingTimeInMillis: function() {
     return fakeSecondsLeft-- * 1000;

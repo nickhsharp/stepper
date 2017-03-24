@@ -5,6 +5,7 @@ let pollerName = "ActivityPoller";
 /*
   START: Dependencies.
 */
+const logger = require("../../lib/utils/log");
 const configs = require("../../scripts/configs.json");
 configs.AwsSdk = require("aws-sdk");
 
@@ -14,7 +15,10 @@ configs.AwsSdk = require("aws-sdk");
 Object.freeze(configs);
 
 const conns = require("../../lib/conns").init(configs);
-const act = require("../../lib/utils/act").init(configs);
+const data = require("../../lib/data").init(configs);
+
+const act = require("../../lib/utils/act").init(configs, data, conns);
+const poller = require("../../lib/poller").init(configs, conns);
 /*
   END: Dependencies
 */
@@ -22,116 +26,51 @@ const act = require("../../lib/utils/act").init(configs);
 module.exports.handler = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   
-  let polling = 0;
-  let logs = {};
-  let pollerName = `ActivityPoller:${context.awsRequestId}`;
-  let memoryThreshold = context.memoryLimitInMB - (context.memoryLimitInMB * 0.1);
-    
-  function proceedCheck() {
-    if(context.getRemainingTimeInMillis() <= 70000) {
+  /*
+    Define the proceedCheck argument in the context and callback scope
+    and it will be injecteded into the doPoll.
+  */
+  let proceedCheck = poller.createProceedCheck(context.memoryLimitInMB, 
+    context.getRemainingTimeInMillis, 
+    `ActivityPoller:${context.awsRequestId}`); 
+
+  /*
+    Define the individual activity instance handler and inject it
+  */
+  function handler(arn, activity) {
+    try {
+      activity.input = JSON.parse(activity.input);
+    } catch(e) {
       /*
-        Less than 70 seconds left in lambda runtime.
-        With an additional 5 seconds buffer for sanity.
-        Don't poll again due to the long poll bug.
-          - @TODO: link to markdown writup
-          - Risk is dropped orphan activity.taskToken
+        Bad input. The error below is descriptive of why we are rejecting;
       */
-      return false;
+      return conns.sendTaskFailure({
+        taskToken: activity.taskToken,
+        cause: "ActivityPoller expects the input to be an object or an array. Something JSON.parse()-able",
+        error: "INVALID-INPUT",
+      });
     }
 
-    if(process.memoryUsage().rss / 1048576 >= memoryThreshold) {
-      /*
-        Getting close to running out of lambda runtime memory.
-        With an additional 10% memory buffer.
-        Don't poll again due to the long poll bug
-          - @TODO: link to markdown writup
-          - Risk is dropped orphan activity.taskToken
-      */
-      return false;
-    }
-    return true;
+    /*
+      Preliminary checks pass, send it down to handle the activity
+    */
+    return act.handleActivity(arn, activity);
   }
 
-  function doPoll(arn, proceedCheck) {
-    if(proceedCheck()) {
-      polling++;
-      logs[arn].polls++;
-
-      conns.getActivityTask({
-        arn: arn,
-        workerName: pollerName
-      }).then((activity) => {
-        if(!activity.taskToken) {
-          /*
-            getActivityTask responds with an empty taskToken
-            if it was just the expiration of the long poll
-            without a new activity instance being scheduled.
-            In which case we can just resolve onwards, 
-            which will trigger another doPoll.
-          */
-          return Promise.resolve();
-        }
-
-        logs[arn].recieved++;
-
-        try {
-          activity.input = JSON.parse(activity.input);
-        } catch(e) {
-          /*
-            Bad input. The error below is descriptive of why we are rejecting;
-          */
-          return conns.sendTaskFailure({
-            taskToken: activity.taskToken,
-            cause: "ActivityPoller expects the input to be an object or an array. Something JSON.parse()-able",
-            error: "INVALID-INPUT",
-          });
-        }
-
-        /*
-          Preliminary checks pass, send it down to handle the activity
-        */
-        logs[arn].handled++;
-        return act.handleActivity(arn, activity);
-
-      }).then(() => {
-        polling--;
-        process.nextTick(() => {
-          doPoll(arn, proceedCheck);
-        });
-      }).catch((err) => {
-        console.log("ERR", err);
-        console.log(logs);
-        callback(err, null);
-      })
-    } else {
-      console.log("proceedCheck:false", arn)
-      if(polling <= 0) {
-        /*
-          Done.  Message below is descriptive.  
-          console.log out a logs dump, and callback to end lambda early if possible
-        */
-        console.log(logs);
-        callback(null, {
-          message: "All activity pollers elected to stop proceeding due to time/memory thresholds",
-          logs: logs,
-        });
-
-      }
-    }
-    return;
-  }
-  
   /*
     Begin a polling loop for each individual activityArn.
     Since they all share a proceedCheck, the ordering doesn't matter.
+    Do poll does not need the context or callback scope, those are handed in.
   */
-  configs.activitiesArns.forEach((activityArn) => {
-    logs[activityArn] = {
-      polls: 0,
-      recieved: 0,
-      handled: 0
-    };
-    doPoll(activityArn, proceedCheck);
+  Promise.all(configs.activitiesArns.map((activityArn) => {
+    return poller.doPoll(activityArn, proceedCheck, handler)
+  })).then((ret) => {
+    utils.LOG.log
+    logger.log("RET", ret);
+  }).catch((err) => {
+    logger.log("LOGS", err.logs);
+    logger.log("ERR", err.err);
+    callback(err, null);
   });
 }
 
