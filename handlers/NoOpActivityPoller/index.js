@@ -3,7 +3,7 @@
 /*
   START: Dependencies.
 */
-const logger = require("../../lib/utils/log");
+const logger = require("utils/lib/log");
 const configs = require("../../scripts/configs.json");
 configs.AwsSdk = require("aws-sdk");
 

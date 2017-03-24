@@ -1,8 +1,10 @@
 "use strict";
 
 const configs = require("../../scripts/configs.json");
-const utils = require("../../lib/utils");
-const logger = utils.LOG;
+
+const UID = require("utils/lib/uid");
+const DOT = require("utils/lib/dot");
+const logger = require("utils/lib/log");
 
 const AWS = require("aws-sdk");
 const step = new AWS.StepFunctions(configs.aws);

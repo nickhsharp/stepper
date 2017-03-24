@@ -1,6 +1,6 @@
 "use strict";
 
-let utils = require("../../lib/utils");
+const utils = require("utils");
 
 module.exports.handler = (event, context, callback) => {
   //take out the first branch to save the original input

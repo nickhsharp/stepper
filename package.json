@@ -13,7 +13,8 @@
   "author": "Nickolas Sharp - Thrivedev",
   "license": "DBAD",
   "dependencies": {
-    "aws-sdk": "^2.28.0"
+    "aws-sdk": "^2.28.0",
+    "utils": "github:nickhsharp/utils"
   },
   "devDependencies": {
     "ava": "^0.18.1"

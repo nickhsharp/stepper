@@ -5,7 +5,7 @@ let pollerName = "ActivityPoller";
 /*
   START: Dependencies.
 */
-const logger = require("../../lib/utils/log");
+const logger = require("utils/lib/log");
 const configs = require("../../scripts/configs.json");
 configs.AwsSdk = require("aws-sdk");
 
@@ -17,7 +17,7 @@ Object.freeze(configs);
 const conns = require("../../lib/conns").init(configs);
 const data = require("../../lib/data").init(configs);
 
-const act = require("../../lib/utils/act").init(configs, data, conns);
+const act = require("../../lib/activities").init(configs, data, conns);
 const poller = require("../../lib/poller").init(configs, conns);
 /*
   END: Dependencies
