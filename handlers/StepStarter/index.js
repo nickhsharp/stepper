@@ -54,8 +54,8 @@ module.exports.handler = (event, context, callback) => {
     A helluva lot more schema validation forth coming
     @TODO: enforce entry and exit schema validation with JSON schema.
   */
-  event.meta.stage = event.meta.stage || process.env.STAGE || 'dev';
-  event.meta.alias = event.meta.alias || 'LATEST';
+  event.meta.stage = event.meta.stage || process.env.STAGE || "dev";
+  event.meta.alias = event.meta.alias || "LATEST";
   event.meta.region = event.meta.region || context.invokedFunctionArn.split(":")[3];
 
   event.meta.name = event.meta.name || utils.UID.v1Sortable();
