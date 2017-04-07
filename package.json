@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "files": [],
+  "files": [
+    "lib/builder"
+  ],
   "scripts": {
     "deploy-dev": "npm run deploy-lambdas-dev && npm run deploy-server-dev",
     "deploy-lambdas-dev": "rm -rf node_modules && npm install --production && sls deploy && npm install"
