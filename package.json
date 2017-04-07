@@ -6,17 +6,17 @@
   "files": [],
   "scripts": {
     "deploy-dev": "npm run deploy-lambdas-dev && npm run deploy-server-dev",
-    "deploy-lambdas-dev": "rm -rf node_modules && npm install --production && sls deploy && npm install",
-    "deploy-prod": "npm run deploy-lambdas-prod && npm run deploy-server-prod",
-    "deploy-lambdas-prod": "rm -rf node_modules && npm install --production && sls deploy --stage production && npm install"
+    "deploy-lambdas-dev": "rm -rf node_modules && npm install --production && sls deploy && npm install"
   },
   "author": "Nickolas Sharp - Thrivedev",
   "license": "DBAD",
   "dependencies": {
-    "aws-sdk": "^2.28.0",
     "utils": "github:nickhsharp/utils"
   },
   "devDependencies": {
     "ava": "^0.18.1"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2.39.0"
   }
 }
