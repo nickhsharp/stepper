@@ -1,5 +1,7 @@
 # Parallel Cleaner
 
+## Update - as of testing (4/07/2017) this has been resolved and the shim is no longer required.
+
 ## Reason
 At the point of writing this (3/20/2017), Parallel States did not support ResultPath on the Parallel itself.  This means that in using a Parallel you will "lose" access to your initial input state if it were an object.  The state language specification specifically mentions the intent of supporting ResultPath on Parallels, and without this functionality they are significantly less useful.
 
