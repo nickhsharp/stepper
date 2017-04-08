@@ -7,8 +7,7 @@
     "lib/builder"
   ],
   "scripts": {
-    "deploy-dev": "npm run deploy-lambdas-dev && npm run deploy-server-dev",
-    "deploy-lambdas-dev": "rm -rf node_modules && npm install --production && sls deploy && npm install"
+    "deploy": "rm -rf node_modules && npm install --production && (cd ./handlers && sls deploy)"
   },
   "author": "Nickolas Sharp - Thrivedev",
   "license": "DBAD",

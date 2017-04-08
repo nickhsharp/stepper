@@ -1,5 +1,5 @@
 {
-  "::states::stateMachine:Example": {
+  "::states::stateMachine:replicationTrigger": {
     "us-west-2": {
       "dev": {
         "LATEST": "arn:aws:states:us-west-2::stateMachine:Example-v1",

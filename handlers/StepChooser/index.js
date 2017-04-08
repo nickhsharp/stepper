@@ -1,5 +1,7 @@
 "use strict";
 
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
+
 const DOT = require("utils/lib/dot");
 const logger = require("utils/lib/log");
 

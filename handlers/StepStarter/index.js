@@ -1,6 +1,8 @@
 "use strict";
 
-const configs = require("../../scripts/configs.json");
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
+
+const configs = require(process.env.REQUIREROOT + "../scripts/configs.json");
 
 const UID = require("utils/lib/uid");
 const DOT = require("utils/lib/dot");

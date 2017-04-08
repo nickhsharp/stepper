@@ -1,5 +1,7 @@
 "use strict";
 
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
+
 const utils = require("utils");
 
 module.exports.handler = (event, context, callback) => {

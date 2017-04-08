@@ -1,10 +1,12 @@
 "use strict";
 
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
+
 /*
   START: Dependencies.
 */
 const logger = require("utils/lib/log");
-const configs = require("../../scripts/configs.json");
+const configs = require(process.env.REQUIREROOT + "../scripts/configs.json");
 configs.AwsSdk = require("aws-sdk");
 
 /*
@@ -12,8 +14,8 @@ configs.AwsSdk = require("aws-sdk");
 */
 Object.freeze(configs);
 
-const conns = require("../../lib/conns").init(configs);
-const poller = require("../../lib/poller").init(configs, conns);
+const conns = require(process.env.REQUIREROOT + "../lib/conns").init(configs);
+const poller = require(process.env.REQUIREROOT + "../lib/poller").init(configs, conns);
 /*
   END: Dependencies
 */

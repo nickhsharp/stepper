@@ -2,11 +2,12 @@
 
 let pollerName = "ActivityPoller";
 
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
 /*
   START: Dependencies.
 */
 const logger = require("utils/lib/log");
-const configs = require("../../scripts/configs.json");
+const configs = require(process.env.REQUIREROOT + "../scripts/configs.json");
 configs.AwsSdk = require("aws-sdk");
 
 /*
@@ -14,11 +15,11 @@ configs.AwsSdk = require("aws-sdk");
 */
 Object.freeze(configs);
 
-const conns = require("../../lib/conns").init(configs);
-const data = require("../../lib/data").init(configs);
+const conns = require(process.env.REQUIREROOT + "../lib/conns").init(configs);
+const data = require(process.env.REQUIREROOT + "../lib/data").init(configs);
 
-const act = require("../../lib/activities").init(configs, data, conns);
-const poller = require("../../lib/poller").init(configs, conns);
+const act = require(process.env.REQUIREROOT + "../lib/activities").init(configs, data, conns);
+const poller = require(process.env.REQUIREROOT + "../lib/poller").init(configs, conns);
 /*
   END: Dependencies
 */

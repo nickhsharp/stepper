@@ -1,6 +1,8 @@
 "use strict";
 
-const configs = require("../../scripts/configs.json");
+process.env.REQUIREROOT = process.env.REQUIREROOT || "../";
+
+const configs = require(process.env.REQUIREROOT + "../scripts/configs.json");
 const logger = require("utils/lib/log");
 
 const AWS = require("aws-sdk");
@@ -12,7 +14,7 @@ module.exports.handler = (event, context, callback) => {
     return callback(null);
   } 
 
-  logger("Closing SubStep", event.meta)
+  logger.log("Closing SubStep", event.meta)
 
   // default success condition is true
   let method = "sendTaskSuccess";
@@ -35,7 +37,7 @@ module.exports.handler = (event, context, callback) => {
   }).promise().then(() => {
     callback(null, event);
   }).catch((err) => {
-    logger("Error calling closer.", err)
+    logger.log("Error calling closer.", err)
     callback(err, null);
   });
 }
