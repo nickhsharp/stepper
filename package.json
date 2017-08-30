@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "files": [
-    "lib/builder"
+    "lib/builder",
+    "lib/poller"
   ],
   "scripts": {
     "deploy": "rm -rf node_modules && npm install --production && (cd ./handlers && sls deploy)"
